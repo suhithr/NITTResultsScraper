@@ -11,8 +11,14 @@ driver.get("http://www.nitt.edu/prm/nitreg/ShowRes.aspx")
 #selects the text box form wherein roll number is entered
 form = driver.find_element_by_name("TextBox1")
 
+def check_exists1():
+	try:
+		driver.find_element_by_id('Dt1')
+	except NoSuchElementException:
+		return False
+	return True
 
-def check_exists():
+def check_exists2():
 	try:
 		driver.find_element_by_id('LblName')
 	except NoSuchElementException:
@@ -24,8 +30,10 @@ def assign(rollno):
 	form.send_keys(str(rollno))
 	form.send_keys(Keys.RETURN)
 	driver.implicitly_wait(3)
-
-	if check_exists() is True:
+	if check_exists1() is True:
+		select = Select(driver.find_element_by_id('Dt1'))
+		select.select_by_visible_text("NOV-2014(REGULAR)")
+	if check_exists2() is True:
 		name = driver.find_element_by_id('LblName')
 		gpa = driver.find_element_by_id('LblGPA')
 		print str(rollno) + '-> Name: '+str(name.text)+' ->GPA: '+str(gpa.text)
